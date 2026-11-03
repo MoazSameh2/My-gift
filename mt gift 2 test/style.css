@@ -1,0 +1,1337 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Tahoma', sans-serif;
+}
+
+html {
+  background: #ff99ac;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, #ff6a88, #ff99ac, #fbc2eb);
+  z-index: -1;
+}
+
+/* الخلفية الغامقة (بتظهر لما الرسالة الأخيرة تتفتح) */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background:
+    radial-gradient(circle at 50% 35%, rgba(255, 60, 120, 0.28), transparent 55%),
+    linear-gradient(160deg, #3a0f2e 0%, #240a1f 50%, #12040f 100%);
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+body.dark-mode::after {
+  opacity: 1;
+}
+
+html.locked,
+body.locked {
+  overflow: hidden;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ===== ترانزيشن بين الصفحات ===== */
+.screen,
+#main-page {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.fade-out {
+  opacity: 0 !important;
+  transform: scale(0.96);
+  pointer-events: none;
+}
+
+.fade-in-prep {
+  opacity: 0;
+  transform: translateY(25px);
+}
+
+/* ===== القلوب والنجوم ===== */
+#hearts-bg,
+#stars-bg,
+#love-hearts-bg {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.heart {
+  position: absolute;
+  bottom: -50px;
+  animation: floatUp linear infinite;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+}
+
+.heart svg {
+  animation: wobble ease-in-out infinite;
+  animation-duration: inherit;
+}
+
+.love-shape {
+  position: absolute;
+  bottom: -60px;
+  animation: floatUp linear infinite;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.18));
+}
+
+.love-shape .shape-inner {
+  animation: wobble ease-in-out infinite;
+  animation-duration: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.love-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-5deg);
+  font-family: 'Brush Script MT', 'Segoe Script', cursive;
+  color: #fff;
+  font-size: 13px;
+  font-weight: bold;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.85), 0 2px 4px rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(0); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(-110vh); opacity: 0; }
+}
+
+@keyframes wobble {
+  0%, 100% { transform: translateX(0) rotate(-8deg); }
+  50% { transform: translateX(var(--wobble)) rotate(8deg); }
+}
+
+.star {
+  position: absolute;
+  color: #fff;
+  text-shadow: 0 0 6px #fff, 0 0 14px rgba(255, 255, 255, 0.9);
+  animation: twinkle ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.15; transform: scale(0.6); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+
+/* ===== الأساسيات ===== */
+.screen {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+#main-page {
+  position: relative;
+  z-index: 2;
+}
+
+.section {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  padding: 40px 30px;
+  max-width: 560px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  animation: popIn 0.6s ease;
+}
+
+@keyframes popIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+h1 {
+  color: #d6336c;
+  margin-bottom: 15px;
+  font-size: 24px;
+}
+
+p {
+  color: #555;
+  margin-bottom: 20px;
+  line-height: 1.8;
+}
+
+button {
+  background: linear-gradient(135deg, #ff6a88, #d6336c);
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+.error {
+  color: #d6336c;
+  font-weight: bold;
+  min-height: 20px;
+  margin-top: 15px;
+  margin-bottom: 0;
+}
+
+/* ===== بوكسات اليوم والشهر ===== */
+.date-hint {
+  color: #d6336c;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.date-inputs {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 14px;
+  direction: ltr;
+  margin: 20px 0 25px;
+}
+
+.date-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.date-box input {
+  width: 84px;
+  height: 84px;
+  font-size: 38px;
+  font-weight: bold;
+  text-align: center;
+  color: #d6336c;
+  border: 3px solid transparent;
+  border-radius: 22px;
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(135deg, #ff6a88, #fbc2eb) border-box;
+  box-shadow: 0 8px 20px rgba(214, 51, 108, 0.25);
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.date-box input::placeholder {
+  color: #ffc2d1;
+}
+
+.date-box input:focus {
+  outline: none;
+  transform: translateY(-4px) scale(1.06);
+  box-shadow: 0 0 0 4px rgba(255, 106, 136, 0.25),
+              0 12px 25px rgba(214, 51, 108, 0.4);
+}
+
+.date-box label {
+  color: #d6336c;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.slash {
+  font-size: 44px;
+  color: #d6336c;
+  padding-bottom: 34px;
+}
+
+.date-inputs.shake {
+  animation: shake 0.4s;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-10px); }
+  40% { transform: translateX(10px); }
+  60% { transform: translateX(-8px); }
+  80% { transform: translateX(8px); }
+}
+
+/* ===== شاشة الرسالة الوسيطة ===== */
+@keyframes titlePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.reveal-title {
+  font-size: 23px;
+  animation: titlePulse 1.6s ease-in-out infinite;
+}
+
+.reveal-message {
+  background: rgba(255, 106, 136, 0.07);
+  border: 2px solid rgba(255, 106, 136, 0.25);
+  border-radius: 16px;
+  padding: 18px 16px;
+  white-space: pre-wrap;
+  text-align: right;
+  font-size: 17px;
+  line-height: 1.9;
+  color: #444;
+  margin-bottom: 25px;
+}
+
+/* ===== البوكس المنوّر (زجاجي بحدود وردي) ===== */
+.card.glow-card {
+  background: linear-gradient(160deg, rgba(95, 28, 66, 0.72), rgba(36, 10, 30, 0.88));
+  border: 1.5px solid rgba(255, 110, 155, 0.55);
+  border-radius: 28px;
+  box-shadow:
+    0 0 22px rgba(255, 70, 120, 0.55),
+    0 0 60px rgba(255, 40, 100, 0.35),
+    inset 0 0 25px rgba(255, 90, 140, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: background 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease, padding 0.6s ease;
+}
+
+.glow-card h1 {
+  color: #ff9ec0;
+  text-shadow: 0 0 14px rgba(255, 90, 140, 0.55);
+}
+
+.glow-card .reveal-message,
+.glow-card .letter {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 120, 160, 0.28);
+  box-shadow: none;
+  color: #ffe3ec;
+}
+
+.glow-card button {
+  box-shadow: 0 0 20px rgba(255, 70, 120, 0.5);
+}
+
+/* لما الرسالة تتخفي: الإطار يختفي وكلمة ياعمري بس هي اللي تفضل في النص */
+.card.glow-card.card-collapsed {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  padding: 6px 0;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.card.glow-card.card-collapsed h1 {
+  color: #3a0f2e;
+  text-shadow: 0 1px 6px rgba(255, 255, 255, 0.35);
+  margin-bottom: 0;
+}
+
+/* ===== ظهور العناصر واحدة واحدة ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ===== العناوين ===== */
+.section-title {
+  text-align: center;
+  color: #3a0f2e;
+  font-size: 26px;
+  margin-bottom: 30px;
+  text-shadow: 0 1px 6px rgba(255, 255, 255, 0.35);
+  transition: color 0.8s ease, text-shadow 0.8s ease;
+}
+
+body.dark-mode .section-title {
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* ===== الصور (استايل سكرابوك) ===== */
+.memory {
+  width: 240px;
+  background: #fff;
+  padding: 12px 12px 30px;
+  border-radius: 8px;
+  margin-bottom: 55px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
+  position: relative;
+  transform: rotate(var(--tilt, -2deg));
+}
+
+.memory:nth-child(even) {
+  margin-left: auto;
+  margin-right: 10px;
+}
+
+.memory:nth-child(odd) {
+  margin-right: auto;
+  margin-left: 10px;
+}
+
+.memory::before {
+  content: "";
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  width: 64px;
+  height: 24px;
+  transform: translateX(-50%) rotate(-4deg);
+  background: rgba(255, 180, 200, 0.55);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.photo-frame {
+  width: 100%;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #ffe3ea;
+}
+
+.photo-frame img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+  cursor: zoom-in;
+}
+
+.caption {
+  font-family: 'Segoe Script', 'Comic Sans MS', cursive;
+  font-size: 18px;
+  color: #d6336c;
+  font-weight: bold;
+  line-height: 1.7;
+  text-align: center;
+  margin-top: 12px;
+  margin-bottom: 0;
+}
+
+/* ===== كارت الموسيقى ===== */
+.music-card {
+  background: linear-gradient(160deg, #3b1c4a, #7b2a6a);
+  border-radius: 25px;
+  padding: 35px 25px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* الدايرة بقت صورتنا (تجربة). لو الصورة مش موجودة بيظهر الشكل القديم */
+.disc {
+  position: relative;
+  width: 124px;
+  height: 124px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background:
+    url("images/couple.jpg") center / cover no-repeat,
+    radial-gradient(circle, #ff99ac 0 18%, #222 19% 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0;
+  border: 4px solid #ff6a88;
+  box-shadow: 0 0 25px rgba(255, 106, 136, 0.6), 0 0 0 8px rgba(255, 255, 255, 0.08);
+  animation: spin 14s linear infinite;
+  animation-play-state: paused;
+}
+
+/* النقطة الصغيرة اللي في النص زي الأسطوانة (امسحيها لو مش عاجباكي) */
+.disc::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border-radius: 50%;
+  background: #fff0f4;
+  border: 3px solid #ff6a88;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+}
+
+.disc.spinning {
+  animation-play-state: running;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.music-label {
+  color: #ffd1dc;
+  font-size: 15px;
+}
+
+.music-card h3 {
+  color: #fff;
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.song-artist {
+  color: #ff99ac;
+  margin-bottom: 20px;
+}
+
+.player {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  direction: ltr;
+  margin-bottom: 20px;
+}
+
+.player button {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.seek-wrap {
+  flex: 1;
+}
+
+.seek-wrap input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: 10px;
+  outline: none;
+  cursor: pointer;
+  background: linear-gradient(
+    to right,
+    #ff6a88 var(--fill, 0%),
+    rgba(255, 255, 255, 0.25) var(--fill, 0%)
+  );
+}
+
+.seek-wrap input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 8px rgba(255, 106, 136, 0.9);
+  transition: transform 0.15s;
+}
+
+.seek-wrap input[type="range"]:active::-webkit-slider-thumb {
+  transform: scale(1.3);
+}
+
+.seek-wrap input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: none;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 8px rgba(255, 106, 136, 0.9);
+}
+
+.seek-wrap input[type="range"]::-moz-range-track {
+  background: transparent;
+}
+
+.times {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  color: #fff;
+  font-size: 13px;
+}
+
+.song-note {
+  color: #ffd1dc;
+  font-size: 16px;
+  margin-bottom: 0;
+}
+
+/* ===== الرسالة (آخر الصفحة) ===== */
+.end {
+  text-align: center;
+  padding-bottom: 100px;
+  max-width: 900px;
+}
+
+.open-hint {
+  color: #fff;
+  font-size: 20px;
+  font-weight: bold;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  margin-bottom: 20px;
+}
+
+#open-letter-btn {
+  font-size: 20px;
+  padding: 16px 34px;
+  border-radius: 16px;
+  animation: pulse 1.8s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(214, 51, 108, 0.6); }
+  70% { box-shadow: 0 0 0 18px rgba(214, 51, 108, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(214, 51, 108, 0); }
+}
+
+.letter-card {
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.letter {
+  white-space: pre-wrap;
+  text-align: right;
+  font-size: 18px;
+  line-height: 1.85;
+  color: #4a3b42;
+  background: linear-gradient(160deg, #fff5f7, #ffeef2);
+  border: 1.5px solid rgba(214, 51, 108, 0.18);
+  border-radius: 16px;
+  padding: 20px 20px;
+  box-shadow: inset 0 1px 3px rgba(214, 51, 108, 0.08);
+  position: relative;
+}
+
+/* الرسالة المخفية */
+.letter.collapsed {
+  display: none;
+}
+
+.letter:not(.collapsed) {
+  animation: letterIn 0.5s ease;
+}
+
+@keyframes letterIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.final {
+  text-align: center;
+  margin-top: 45px;
+}
+
+/* كلمة بحبك: نيون وردي (الإيموجي لوحدها عشان تفضل بألوانها) */
+.final h2 {
+  font-family: 'Cairo', 'Tahoma', sans-serif;
+  font-weight: 700;
+  font-size: 32px;
+  letter-spacing: 1px;
+  margin-bottom: 30px;
+  color: #fff0f6;
+  text-shadow:
+    0 0 4px rgba(255, 255, 255, 0.9),
+    0 0 12px rgba(255, 150, 190, 0.9),
+    0 0 26px rgba(255, 80, 140, 0.75),
+    0 0 52px rgba(255, 40, 110, 0.55);
+  animation: neonGlow 3.2s ease-in-out infinite;
+}
+
+.love-emoji {
+  display: inline-block;
+  margin-right: 6px;
+  letter-spacing: 4px;
+}
+
+.final h2::before,
+.final h2::after {
+  content: "";
+  display: block;
+  width: 160px;
+  height: 2px;
+  margin: 0 auto 18px;
+  border-radius: 10px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 170, 200, 0.95),
+    transparent
+  );
+  box-shadow: 0 0 12px rgba(255, 90, 140, 0.8);
+  animation: lineGlow 3.2s ease-in-out infinite;
+}
+
+.final h2::after {
+  margin: 18px auto 0;
+  animation-delay: 1.6s;
+}
+
+@keyframes neonGlow {
+  0%, 100% {
+    text-shadow:
+      0 0 4px rgba(255, 255, 255, 0.9),
+      0 0 12px rgba(255, 150, 190, 0.9),
+      0 0 26px rgba(255, 80, 140, 0.75),
+      0 0 52px rgba(255, 40, 110, 0.55);
+  }
+  50% {
+    text-shadow:
+      0 0 3px rgba(255, 255, 255, 0.7),
+      0 0 8px rgba(255, 150, 190, 0.7),
+      0 0 18px rgba(255, 80, 140, 0.5),
+      0 0 34px rgba(255, 40, 110, 0.3);
+  }
+}
+
+@keyframes lineGlow {
+  0%, 100% { opacity: 0.4; width: 120px; }
+  50%      { opacity: 1;   width: 190px; }
+}
+
+/* لما الرسالة تتخفي والصفحة ترجع وردي: الكلمة تبقى بنفسجي غامق عشان تبان */
+body:not(.dark-mode) .final h2 {
+  color: #3a0f2e;
+  animation: none;
+  text-shadow: 0 1px 8px rgba(255, 255, 255, 0.5);
+}
+
+body:not(.dark-mode) .final h2::before,
+body:not(.dark-mode) .final h2::after {
+  background: linear-gradient(to right, transparent, rgba(58, 15, 46, 0.8), transparent);
+  box-shadow: none;
+}
+
+/* ===== أزرار آخر الصفحة (أقراص منوّرة) ===== */
+.final-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 6px;
+}
+
+.pill-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px 10px 20px;
+  font-family: 'Cairo', 'Tahoma', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.pill-icon {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 16px;
+}
+
+.pill-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
+}
+
+.pill-btn:hover {
+  transform: translateY(-3px) scale(1.04);
+}
+
+.pill-btn:hover::after {
+  left: 130%;
+}
+
+.pill-btn:active {
+  transform: scale(0.97);
+}
+
+.pill-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+  transform: none;
+}
+
+.pill-hide {
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(rgba(48, 12, 38, 0.92), rgba(48, 12, 38, 0.92)) padding-box,
+    linear-gradient(135deg, #ff8fb5, #c084fc) border-box;
+  box-shadow: 0 0 18px rgba(255, 100, 150, 0.45);
+}
+
+.pill-hide.is-hidden {
+  background: linear-gradient(135deg, #c084fc, #ff6a88);
+  box-shadow: 0 0 22px rgba(192, 132, 252, 0.6);
+}
+
+.pill-top {
+  background: linear-gradient(135deg, #ff6a88, #d6336c);
+  box-shadow: 0 0 20px rgba(255, 70, 120, 0.55), 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+.pill-plant {
+  background: linear-gradient(135deg, #8b5cf6, #ff6a88);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.55), 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+/* ===== شاشة الزوم ===== */
+#lightbox {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.92);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#lightbox.hidden {
+  display: none !important;
+}
+
+#lightbox-area {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+}
+
+#lightbox-img {
+  max-width: 95%;
+  max-height: 90%;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-drag: none;
+  transition: transform 0.15s ease;
+}
+
+#lightbox-img.dragging {
+  cursor: grabbing;
+  transition: none;
+}
+
+#lightbox-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 101;
+  padding: 8px 14px;
+  font-size: 18px;
+}
+
+.lightbox-controls {
+  position: absolute;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 101;
+  display: flex;
+  gap: 10px;
+}
+
+.lightbox-controls button {
+  padding: 10px 16px;
+  font-size: 18px;
+}
+
+/* ===== إطار الفيديو (نيون بحدود متدرجة) ===== */
+.video-card {
+  position: relative;
+  padding: 12px;
+  border-radius: 28px;
+  border: 3px solid transparent;
+  background:
+    linear-gradient(#240a1f, #240a1f) padding-box,
+    linear-gradient(135deg, #ff6a88, #c084fc, #ff6a88) border-box;
+  box-shadow: 0 0 26px rgba(255, 90, 150, 0.5), 0 18px 36px rgba(0, 0, 0, 0.3);
+}
+
+.video-card::before {
+  content: "♥";
+  position: absolute;
+  top: -17px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 16px;
+  color: #fff;
+  background: linear-gradient(135deg, #ff6a88, #d6336c);
+  box-shadow: 0 0 14px rgba(255, 90, 140, 0.8);
+  z-index: 2;
+}
+
+.video-card video {
+  width: 100%;
+  max-height: 450px;
+  border-radius: 18px;
+  display: block;
+  background: #12040f;
+}
+
+.video-caption {
+  text-align: center;
+  color: #fff;
+  font-weight: bold;
+  font-size: 16px;
+  margin-top: 14px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* ===== عداد الحب (زجاجي ملوّن) ===== */
+.counter-card {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  padding: 30px 18px 26px;
+  border-radius: 28px;
+  background: linear-gradient(150deg, #ff6a88 0%, #c2386f 52%, #6b2a86 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 26px rgba(255, 90, 150, 0.45), 0 18px 36px rgba(0, 0, 0, 0.28);
+}
+
+.counter-card::before {
+  content: "";
+  position: absolute;
+  top: -70px;
+  left: -50px;
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent 70%);
+  pointer-events: none;
+}
+
+.counter-card h3 {
+  position: relative;
+  color: #fff;
+  font-size: 19px;
+  margin-bottom: 20px;
+  text-shadow: 0 0 12px rgba(255, 180, 210, 0.7);
+}
+
+.counter-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.counter-box {
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 18px;
+  padding: 14px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 6px 14px rgba(0, 0, 0, 0.18);
+}
+
+.counter-box span {
+  font-size: 26px;
+  font-weight: bold;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 10px rgba(255, 200, 225, 0.8);
+}
+
+.counter-box label {
+  font-size: 12px;
+  color: #ffe0ec;
+}
+
+/* مربع الثواني بينبض كل ثانية */
+.counter-box:last-child {
+  animation: secPulse 1s ease-in-out infinite;
+}
+
+@keyframes secPulse {
+  0%, 100% { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 0 0 rgba(255, 220, 235, 0); }
+  50%      { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 0 16px rgba(255, 220, 235, 0.65); }
+}
+
+.counter-note {
+  position: relative;
+  color: #fff;
+  font-weight: bold;
+  margin-bottom: 0;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* ===== بوكس يوم ارتبطنا ===== */
+.love-day-card {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 34px 20px 30px;
+  border-radius: 28px;
+  background: linear-gradient(145deg, #5a1745 0%, #8f2358 55%, #c2386f 100%);
+  border: 1.5px solid rgba(255, 200, 220, 0.45);
+  box-shadow:
+    0 0 28px rgba(255, 80, 140, 0.45),
+    0 18px 36px rgba(0, 0, 0, 0.28),
+    inset 0 0 30px rgba(255, 255, 255, 0.08);
+}
+
+.love-day-card::before,
+.love-day-card::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.love-day-card::before {
+  top: -60px;
+  right: -50px;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.28), transparent 70%);
+}
+
+.love-day-card::after {
+  bottom: -70px;
+  left: -40px;
+  width: 190px;
+  height: 190px;
+  background: radial-gradient(circle, rgba(255, 140, 190, 0.35), transparent 70%);
+}
+
+.ld-heart {
+  position: relative;
+  width: 66px;
+  height: 66px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 22px rgba(255, 160, 200, 0.7);
+  animation: ldFloat 3.2s ease-in-out infinite;
+}
+
+.ld-heart::before {
+  content: "";
+  position: absolute;
+  inset: -9px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(255, 210, 230, 0.6);
+  animation: spin 14s linear infinite;
+}
+
+@keyframes ldFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-5px); }
+}
+
+.ld-title {
+  position: relative;
+  color: #fff;
+  font-weight: 700;
+  font-size: 20px;
+  text-shadow: 0 0 12px rgba(255, 150, 190, 0.8);
+}
+
+.love-date-pill {
+  position: relative;
+  padding: 10px 26px;
+  border-radius: 40px;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: #fff;
+  direction: ltr;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 18px rgba(255, 150, 195, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  text-shadow: 0 0 10px rgba(255, 200, 225, 0.8);
+}
+
+.love-date-pill::before,
+.love-date-pill::after {
+  content: "♥";
+  font-size: 14px;
+  color: #ffc2d9;
+  margin: 0 8px;
+  letter-spacing: 0;
+}
+
+/* ===== الفاصل ===== */
+.divider {
+  max-width: 300px;
+  height: 3px;
+  margin: 10px auto 30px;
+  border-radius: 10px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.8),
+    transparent
+  );
+  position: relative;
+}
+
+.divider::before {
+  content: "💖";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  background: linear-gradient(135deg, #ff6a88, #ff99ac);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== فكرة الشجرة (ازرعي البزره) ===== */
+.garden-section {
+  max-width: 460px;
+  margin: 60px auto 0;
+  text-align: center;
+}
+
+.garden-scene {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 22px;
+  border-radius: 30px;
+  background: linear-gradient(180deg, #1a0a2e 0%, #3a0f4e 35%, #8f2358 75%, #ff8fa8 100%);
+  border: 1.5px solid rgba(255, 160, 200, 0.5);
+  box-shadow: 0 0 26px rgba(255, 80, 140, 0.45), 0 18px 36px rgba(0, 0, 0, 0.3);
+}
+
+#garden-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.g-star {
+  animation: gTwinkle 3s ease-in-out infinite;
+}
+
+@keyframes gTwinkle {
+  0%, 100% { opacity: 0.25; }
+  50%      { opacity: 1; }
+}
+
+#garden-seed {
+  opacity: 1;
+}
+
+#garden-seed.falling {
+  animation: seedFall 1.35s cubic-bezier(0.5, 0, 0.9, 0.6) forwards;
+}
+
+#garden-seed.planted {
+  transform: translateY(390px);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+@keyframes seedFall {
+  0%   { transform: translateY(0); }
+  82%  { transform: translateY(396px); }
+  100% { transform: translateY(390px); }
+}
+
+#garden-ripple {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+#garden-ripple.on {
+  animation: rippleOut 1.2s ease-out forwards;
+}
+
+@keyframes rippleOut {
+  0%   { opacity: 0.9; transform: scale(0.3); }
+  100% { opacity: 0;   transform: scale(3.4); }
+}
+
+.limb {
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: limbGrow 1s ease-out forwards;
+}
+
+@keyframes limbGrow {
+  to { stroke-dashoffset: 0; }
+}
+
+.bloom {
+  transform-box: fill-box;
+  transform-origin: 50% 70%;
+  transform: scale(0);
+  animation: bloomIn 0.8s cubic-bezier(0.2, 1.5, 0.4, 1) forwards;
+}
+
+@keyframes bloomIn {
+  to { transform: scale(1); }
+}
+
+#hearts-layer {
+  filter: drop-shadow(0 0 4px rgba(255, 120, 170, 0.6));
+}
+
+#garden-petals {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.petal {
+  position: absolute;
+  top: 12%;
+  opacity: 0;
+  pointer-events: none;
+  animation: petalFall linear forwards;
+}
+
+@keyframes petalFall {
+  0%   { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+  10%  { opacity: 0.95; }
+  100% { transform: translate(var(--dx), 330px) rotate(var(--rot)); opacity: 0; }
+}
+
+/* ===== الصور: تظهر وتختفي مع السكرول في الاتجاهين ===== */
+.memory.reveal {
+  opacity: 0;
+  transform: rotate(var(--tilt, -2deg)) scale(0.88);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.memory.reveal.visible {
+  opacity: 1;
+  transform: rotate(var(--tilt, -2deg)) scale(1);
+}
+
+/* ===== زرار أغنية الخلفية ===== */
+.bg-btn {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px 8px 10px;
+  font-family: 'Cairo', 'Tahoma', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  border: 1.5px solid transparent;
+  border-radius: 30px;
+  background:
+    linear-gradient(rgba(48, 12, 38, 0.9), rgba(48, 12, 38, 0.9)) padding-box,
+    linear-gradient(135deg, #ff8fb5, #c084fc) border-box;
+  box-shadow: 0 0 14px rgba(255, 100, 150, 0.45);
+}
+
+.bg-btn .bg-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 12px;
+}
+
+/* لما الأغنية تخلص الزرار يلفت النظر */
+.bg-btn.ended {
+  background: linear-gradient(135deg, #c084fc, #ff6a88);
+  animation: pulse 1.8s infinite;
+}
