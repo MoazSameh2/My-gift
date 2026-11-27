@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My world❤️🥹🌎</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-mode">
+
+  <div id="stars-bg"></div>
+  <div id="hearts-bg"></div>
+  <div id="love-hearts-bg"></div>
+
+  <!-- شاشة الدخول -->
+  <div class="screen" id="login-screen">
+    <div class="card">
+      <h1>💌 قبل ما تدخلي... 💌</h1>
+      <p>في هدية مستنياكي جوا يارب تعجبك💖</p>
+      <p class="date-hint">اكتبي تاريخ ميلادك💖</p>
+
+      <div class="date-inputs" id="date-inputs">
+        <div class="date-box">
+          <input type="tel" id="day-input" inputmode="numeric" maxlength="2" placeholder="00" autocomplete="off">
+          <label for="day-input">اليوم</label>
+        </div>
+        <span class="slash">/</span>
+        <div class="date-box">
+          <input type="tel" id="month-input" inputmode="numeric" maxlength="2" placeholder="00" autocomplete="off">
+          <label for="month-input">الشهر</label>
+        </div>
+      </div>
+      <button onclick="checkDate()">افتحي الهديه💖</button>
+      <p id="error-msg" class="error"></p>
+    </div>
+  </div>
+
+  <!-- شاشة الرسالة الوسيطة -->
+  <div class="screen hidden" id="reveal-screen">
+    <div class="card">
+      <h1 class="reveal-title">⏳ استني اقري الرسالة دي</h1>
+      <div class="reveal-message" id="reveal-message"></div>
+      <button id="open-gift-btn" onclick="goToMainPage()">افتحي يلا الهديه ♥️</button>
+    </div>
+  </div>
+
+  <!-- الصفحة الرئيسية -->
+  <main id="main-page" class="hidden">
+    <!-- الصور -->
+    <section class="section">
+      <h2 class="section-title reveal">العيد ال18 للقمر بتاعتي🙈🙈</h2>
+      <div class="divider"></div>
+      <div id="gallery"></div>
+    </section>
+    <h2 class="section-title reveal">وكل يوم بشوفك بتكبري قدام عيني </h2>
+    <div class="divider"></div>
+
+    <!-- عداد الحب -->
+    <section class="section">
+      <div class="counter-card reveal">
+        <h3>💖 مع بعض من <span id="start-date-display"></span></h3>
+
+        <div class="counter-grid">
+          <div class="counter-box">
+            <span id="c-years">0</span>
+            <label>سنة</label>
+          </div>
+          <div class="counter-box">
+            <span id="c-months">0</span>
+            <label>شهر</label>
+          </div>
+          <div class="counter-box">
+            <span id="c-days">0</span>
+            <label>يوم</label>
+          </div>
+          <div class="counter-box">
+            <span id="c-hours">0</span>
+            <label>ساعة</label>
+          </div>
+          <div class="counter-box">
+            <span id="c-minutes">0</span>
+            <label>دقيقة</label>
+          </div>
+          <div class="counter-box">
+            <span id="c-seconds">0</span>
+            <label>ثانية</label>
+          </div>
+        </div>
+
+        <p class="counter-note"> كل ثانيه بتعدي عليا كانها سنه سوا ويارب نفضل سوا مع بعض العمر كلو 💖🥹</p>
+      </div>
+    </section>
+
+    <!-- يوم الارتباط -->
+    <section class="section">
+      <div class="love-day-card reveal">
+        <div class="ld-heart">💞</div>
+        <span class="ld-title">يوم ارتبطنا 💌</span>
+        <div class="love-date-pill" id="love-date-display"></div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- كارت الموسيقى -->
+    <section class="section">
+      <div class="music-card reveal">
+        <div class="disc" id="disc">🎵</div>
+        <p class="music-label"></p>
+        <h3 id="song-title">7obk Rezk💖</h3>
+        <p id="song-artist" class="song-artist">Tamer Ashour</p>
+
+        <audio id="song" src="audio/song.mp3" preload="metadata"></audio>
+
+        <div class="player">
+          <button id="play-btn" onclick="togglePlay()">▶</button>
+          <div class="seek-wrap">
+            <input type="range" id="seek" min="0" max="100" step="0.1" value="0">
+            <div class="times">
+              <span id="time">0:00</span>
+              <span id="duration">0:00</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="song-note">كل لما اسمعها بفتكر انك حبك جيه في وقتو وعودتيني عن كل حاجه 💖</p>
+      </div>
+    </section>
+    <div class="divider"></div>
+    <!-- الفيديو -->
+    <section class="section">
+      <div class="video-card reveal">
+        <video
+          src="video/video2.mp4"
+          controls
+          playsinline
+          preload="metadata"
+          poster=""
+        ></video>
+      </div>
+    </section>
+    <!-- الفيديو -->
+    <section class="section">
+      <div class="video-card reveal">
+        <video
+          src="video/video3.mp4"
+          controls
+          playsinline
+          preload="metadata"
+          poster=""
+        ></video>
+      </div>
+    </section>
+    <div class="divider"></div>
+    <!-- الرسالة (آخر حاجة في الصفحة) -->
+    <section class="section end">
+
+      <div id="open-letter-wrap" class="reveal">
+        <p class="open-hint">💌 في رسالة أخيرا مستنياكي 💌</p>
+        <button id="open-letter-btn" onclick="openLetter()">💌 افتحي الرسالة</button>
+      </div>
+
+      <div id="letter-section" class="hidden">
+        <div class="card letter-card glow-card" id="letter-card">
+          <h1> ياعمري💖</h1>
+          <div id="love-letter" class="letter"></div>
+        </div>
+
+        <div id="final" class="final reveal hidden">
+          <h2><span class="love-word">بحبككككككككككككككككك</span><span class="love-emoji">🙈🥹💖</span></h2>
+
+          <div class="final-actions">
+            <button id="toggle-letter-btn" class="pill-btn pill-hide" onclick="toggleLetter()">
+              <span class="pill-icon">🙈</span>
+              <span class="pill-text">إخفاء الرسالة</span>
+            </button>
+
+            <button class="pill-btn pill-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+              <span class="pill-icon">↑</span>
+              <span class="pill-text">ارجعي لفوق</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- فكرة الشجرة: ازرعي البزره -->
+        <section class="garden-section reveal">
+          <div class="garden-scene" id="garden-scene">
+            <svg id="garden-svg" viewBox="0 0 400 440" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+              <defs>
+                <path id="hrtPath" d="M23.6,0c-3.4,0-6.3,2.1-7.6,5C14.7,2.1,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,16,21.2,16,21.2s16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z"/>
+                <linearGradient id="gGround" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#3fae7b"/>
+                  <stop offset="1" stop-color="#1b5e43"/>
+                </linearGradient>
+              </defs>
+
+              <g id="garden-stars"></g>
+              <circle cx="338" cy="62" r="34" fill="#fff4d6" opacity="0.12"/>
+              <circle cx="338" cy="62" r="20" fill="#fff4d6"/>
+
+              <path d="M0 388 Q 70 372 150 380 T 290 378 T 400 384 V 440 H 0 Z" fill="url(#gGround)"/>
+              <path d="M0 410 Q 100 396 200 404 T 400 406 V 440 H 0 Z" fill="#14402e" opacity="0.55"/>
+
+              <g id="tree-layer"></g>
+              <g id="hearts-layer"></g>
+
+              <circle id="garden-ripple" cx="200" cy="386" r="10" fill="none" stroke="#ffc2d9" stroke-width="2"/>
+              <circle id="garden-seed" cx="200" cy="-14" r="7" fill="#d9a066"/>
+            </svg>
+            <div id="garden-petals"></div>
+          </div>
+
+          <button id="plant-btn" class="pill-btn pill-plant" onclick="plantSeed()">
+            <span class="pill-icon">🙈</span>
+            <span class="pill-text">ازرعي شجره حبنا</span>
+          </button>
+        </section>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- عرض الصورة بالزوم -->
+  <div id="lightbox" class="hidden">
+    <button id="lightbox-close" onclick="closeLightbox()">✕</button>
+    <div class="lightbox-controls">
+      <button onclick="zoomOut()">➖</button>
+      <button onclick="resetZoom()">↺</button>
+      <button onclick="zoomIn()">➕</button>
+    </div>
+    <div id="lightbox-area">
+      <img id="lightbox-img" src="" alt="ذكرى مكبرة">
+    </div>
+  </div>
+
+  <!-- زرار أغنية الخلفية (فوق على اليمين) -->
+  <button id="bg-btn" class="bg-btn hidden" onclick="toggleBgMusic()">
+    <span class="bg-icon">⏸</span>
+    <span class="bg-text">وقفي الأغنية</span>
+  </button>
+
+  <script src="script.js"></script>
+</body>
+</html>
